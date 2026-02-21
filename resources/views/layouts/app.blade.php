@@ -8,8 +8,12 @@
   ```
 -->
 @vite('resources/css/app.css')
+@vite('resources/js/app.js')
 <html class="h-full bg-gray-900">
 <body class="h-full">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
+<script src="https://code.jquery.com/jquery-3.0.0.js"></script>
+<script src="//cdn.datatables.net/2.3.7/js/dataTables.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <div class="min-h-full">

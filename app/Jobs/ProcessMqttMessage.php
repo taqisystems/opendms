@@ -25,8 +25,7 @@ class ProcessMqttMessage implements ShouldQueue
     public function handle(): void
     {
 	    Log::info("Processing ClusterDuck Data...");
-	    $json = stripslashes($this->payload);
-	    $data = json_decode($json, true);
+	    $data = json_decode($this->payload, true);
 	    ClusterData::create([
 	      'duck_id'    => $data["payload"]["DeviceID"],
               'topic'      => $data["eventType"],

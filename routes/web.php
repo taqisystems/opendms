@@ -13,4 +13,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/status', [StatusController::class, 'index']);
 });
 
+Route::get('/dashboard/json', [DashboardController::class, 'json'])
+	->withoutMiddleware([EnsureTokenIsValid::class]);
+
+Route::get('/dashboard/timeline', [DashboardController::class, 'timeline'])
+        ->withoutMiddleware([EnsureTokenIsValid::class]);
+
 require __DIR__.'/settings.php';

@@ -18,4 +18,20 @@ class DashboardController extends Controller
 
 	return view('dashboard', compact(['clusters','mamaducks','count']));
     }
+
+    public function json()
+    {
+        $clusters = ClusterData::orderBy('id', 'desc')->get();
+	$count = $clusters->count();
+
+	$data = ["data" => $clusters, "totalCount" => $count];
+	return response()->json($data, 200);
+    }
+
+    public function timeline()
+    {
+        $cluster = ClusterData::orderBy('id','desc')->first();
+	$count = ClusterData::count();
+	return response()->json(["data" => $cluster, "totalCount" => $count], 200);
+    }
 }
