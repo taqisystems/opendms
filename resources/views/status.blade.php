@@ -35,7 +35,7 @@
   <div class="{{ $mamaduck->urgency === \App\Enums\Urgency::Critical ? 'px-4 py-4 sm:px-6 flex flex-col gap-2 bg-red-900/50' : 'px-4 py-4 sm:px-6 flex flex-col gap-2' }}">
     <div class="flex items-center justify-between">
       <span class="{{ $mamaduck->urgency === \App\Enums\Urgency::Critical ? 'text-sm font-bold text-red-300 tracking-wide' : 'text-sm font-semibold text-white' }}">
-        {{ $mamaduck->duck_id }} [{{ $mamaduck->message_id }}]
+        {{ $mamaduck->duck_id }}
       </span>
       <button type="button" data-status-duck="{{ $mamaduck->duck_id }}" class="rounded bg-green-500 px-2 py-1 text-xs font-semibold text-white hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500">Online</button>
     </div>
