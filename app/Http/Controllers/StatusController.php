@@ -2,23 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ClusterDataService;
+use App\Services\MqttService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Models\ClusterData;
-use Illuminate\Support\Facades\DB;
 
 class StatusController extends Controller
 {
+    public function __construct(
+        private ClusterDataService $clusterDataService,
+        private MqttService $mqttService,
+    ) {}
+
     public function index()
     {
+        $mamaducks      = $this->clusterDataService->getLatestPerDuck();
+        $latestCoordsId = $this->clusterDataService->latestWithCoordsId($mamaducks);
 
-$mamaducks = ClusterData::whereIn('id', function (
-    $query
-) {
-    $query->selectRaw('max(id)')
-        ->from('cluster_data') // Use the actual table name
-        ->groupBy('duck_id'); // Replace with your column name (e.g., 'user_id')
-})->get();
+        return view('status', compact('mamaducks', 'latestCoordsId'));
+    }
 
-        return view('status', compact(['mamaducks']));
+    public function history(): JsonResponse
+    {
+        return response()->json($this->clusterDataService->buildHistoryResponse());
+    }
+
+    public function message(Request $request): JsonResponse
+    {
+        $this->mqttService->sendCommand(
+            message: $request->input('message'),
+            target:  $request->input('duck_id'),
+        );
+
+        return response()->json(['message' => 'Form submitted successfully!']);
     }
 }

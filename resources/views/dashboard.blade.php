@@ -52,7 +52,7 @@
   </div>
 </div>
 
-<div class="flow-root w-140 bg-transparent border border-white/10 m-4 rounded-base shadow-xs p-6">
+<div class="flow-root w-140 bg-transparent border border-white/10 m-4 rounded-base shadow-xs p-6 overflow-hidden">
   <ul role="list" class="-mb-8">
   </ul>
 </div>
@@ -164,9 +164,11 @@
           <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-white lg:table-cell">Topic</th>
           <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-white lg:table-cell">MessageID</th>
           <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-white lg:table-cell">Path</th>
-          <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-white lg:table-cell">Payload</th>
+          <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-white lg:table-cell">Message</th>
           <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-white lg:table-cell">Hops</th>
           <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-white lg:table-cell">Type</th>
+          <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-white lg:table-cell">Urgency</th>
+          <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-white lg:table-cell">Map</th>
         </tr>
       </thead>
       <tbody>

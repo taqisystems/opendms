@@ -2,36 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\ClusterData;
-use Illuminate\Support\Number;
+use App\Services\ClusterDataService;
+use Illuminate\Http\JsonResponse;
 
 class DashboardController extends Controller
 {
+    public function __construct(private ClusterDataService $clusterDataService)
+    {}
+
     public function index()
     {
-        $clusters = ClusterData::orderBy('id', 'desc')->get(); 
-	$count = $clusters->count();
-	$mamaducks = ClusterData::where(['duck_type' => 2])
-		->distinct('duck_id')
-		->count();
+        $clusters  = $this->clusterDataService->getAllOrderedByLatest();
+        $stats     = $this->clusterDataService->getDashboardStats();
 
-	return view('dashboard', compact(['clusters','mamaducks','count']));
+        return view('dashboard', [
+            'clusters'  => $clusters,
+            'count'     => $stats['count'],
+            'mamaducks' => $stats['mamaducks'],
+        ]);
     }
 
-    public function json()
+    public function json(): JsonResponse
     {
-        $clusters = ClusterData::orderBy('id', 'desc')->get();
-	$count = $clusters->count();
-
-	$data = ["data" => $clusters, "totalCount" => $count];
-	return response()->json($data, 200);
+        return response()->json($this->clusterDataService->getJsonFeed(), 200);
     }
 
-    public function timeline()
+    public function timeline(): JsonResponse
     {
-        $clusters = ClusterData::orderBy('id','desc')->take(4)->get();
-	$count = ClusterData::count();
-	return response()->json(["data" => $clusters, "totalCount" => $count], 200);
+        return response()->json($this->clusterDataService->getTimeline(), 200);
     }
 }

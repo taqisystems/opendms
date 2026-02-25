@@ -11,6 +11,8 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/status', [StatusController::class, 'index']);
+    Route::post('/status/send', [StatusController::class, 'message']);
+    Route::get('/status/history', [StatusController::class, 'history']);
 });
 
 Route::get('/dashboard/json', [DashboardController::class, 'json'])

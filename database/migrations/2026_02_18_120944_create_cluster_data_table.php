@@ -17,7 +17,7 @@ return new class extends Migration
 	    $table->string('duck_id');
 	    $table->string('topic');
 	    $table->string('message_id');
-	    $table->text('payload');
+	    $table->text('payload')->nullable();
 	    $table->text('path')->nullable();
 	    $table->integer('hops');
 	    $table->integer('duck_type');
