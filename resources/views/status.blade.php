@@ -192,8 +192,9 @@
     </div>
   </div>
 
-  <div class="mt-2">
-            <button type="submit" command="close" commandfor="msg-dialog-{{ $mamaduck->duck_id }}" class="duck-send-message inline-flex w-full justify-center rounded-md bg-yellow-500 px-3 py-2 text-sm font-semibold text-white hover:bg-yellow-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500">Send Message</button>
+  <div class="mt-2 flex items-center gap-3">
+            <button type="submit" command="close" commandfor="msg-dialog-{{ $mamaduck->duck_id }}" class="duck-send-message inline-flex justify-center rounded-md bg-yellow-500 px-3 py-2 text-sm font-semibold text-white hover:bg-yellow-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500">Send Message</button>
+            <span class="send-status text-xs"></span>
   </div>
 </form>
         </el-dialog-panel>

@@ -295,9 +295,10 @@ $(document).ready(function() {
               if (messages.length === 0) {
                 $box.html('<p class="text-center text-xs text-gray-500">No messages yet.</p>');
               } else {
-                // Build a set of TEXT values confirmed read by MSG_READ receipts from the duck
+                // Build a set of TEXT values confirmed read — only from dcmd topic MSG_READ receipts
                 var readTexts = new Set();
                 $.each(messages, function(i, m) {
+                  if (m.topic !== 'dcmd') return;
                   var p = m.payload || '';
                   if (/^MSG_READ\b/i.test(p)) {
                     var tm = p.match(/TEXT:(.+)$/i);
@@ -479,12 +480,29 @@ $(document).ready(function() {
       });
     });
 
+    $(document).on('keydown', '.duck-message-form textarea', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        $(this).closest('.duck-message-form').trigger('submit');
+      }
+    });
+
     $(document).on('submit', '.duck-message-form', function(e) {
         e.preventDefault();
 
         var $form     = $(this);
+        var $textarea = $form.find('textarea[name="message"]');
+        var $submit   = $form.find('button[type="submit"]');
+        var $status   = $form.find('.send-status');
         var formData  = $form.serialize();
         var actionUrl = $form.attr('action');
+
+        if ($textarea.val().trim() === '') return;
+
+        // Disable input while sending
+        $textarea.prop('disabled', true);
+        $submit.prop('disabled', true).text('Sending…');
+        $status.text('').removeClass('text-green-400 text-red-400').addClass('text-yellow-400').text('Sending…');
 
         $.ajax({
             type: 'POST',
@@ -492,15 +510,15 @@ $(document).ready(function() {
             data: formData,
             success: function(response) {
                 $form[0].reset();
+                $status.removeClass('text-yellow-400 text-red-400').addClass('text-green-400').text('Message sent.');
+                setTimeout(function() { $status.text(''); }, 3000);
             },
             error: function(xhr, status, error) {
-                var errors = xhr.responseJSON.errors;
-                var errorHtml = '<div><ul>';
-                $.each(errors, function(key, value) {
-                    errorHtml += '<li>' + value + '</li>';
-                });
-                errorHtml += '</ul></div>';
-                $form.find('#responseMessage').html(errorHtml);
+                $status.removeClass('text-yellow-400 text-green-400').addClass('text-red-400').text('Failed to send. Try again.');
+            },
+            complete: function() {
+                $textarea.prop('disabled', false);
+                $submit.prop('disabled', false).text('Send Message');
             }
         });
     });

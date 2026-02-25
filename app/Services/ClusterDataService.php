@@ -82,7 +82,7 @@ class ClusterDataService
         return ClusterData::whereIn('id', function ($query) {
             $query->selectRaw('max(id)')
                 ->from('cluster_data')
-                ->whereNotIn('topic', ['22', 'outbound'])
+                ->whereIn('topic', ['status', 'alert'])
                 ->groupBy('duck_id');
         })->get();
     }
@@ -106,11 +106,13 @@ class ClusterDataService
     public function getRecentMessagesPerDuck(int $limit = 5): Collection
     {
         return ClusterData::orderByDesc('id')
+            ->whereIn('topic', ['status', 'alert', 'outbound', 'dcmd'])
             ->get()
             ->groupBy('duck_id')
             ->map(fn($rows) => $rows->take($limit)->map(fn($row) => [
                 'id'         => $row->id,
                 'message_id' => $row->message_id,
+                'topic'      => $row->topic,
                 'payload'    => $row->payload,
                 'text'       => $row->display_text,
                 'map_url'    => $row->map_url,
@@ -126,6 +128,7 @@ class ClusterDataService
     public function lastKnownCoordsPerDuck(): Collection
     {
         return ClusterData::orderByDesc('id')
+            ->whereIn('topic', ['status', 'alert', 'outbound', 'dcmd'])
             ->get()
             ->filter(fn(ClusterData $d) => $d->map_url !== null)
             ->groupBy('duck_id')
